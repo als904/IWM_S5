@@ -1,0 +1,1 @@
+{"type":"FeatureCollection","features":[{"type":"Feature","properties":{"name":"Lincoln Terrace Park","Parks":"true"},"geometry":{"type":"Point","coordinates":[-73.92695903778076,40.66709790906187]}},{"type":"Feature","properties":{"name":"Eastern Pkwy","Parks":"false"},"geometry":{"type":"Point","coordinates":[-73.93107891082764,40.66888822638791]}}]}

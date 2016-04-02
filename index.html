@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Planning ahead for Weeksville Neighborhoods</title>
+
+<!-- Leaflet Stylesheet -->
+  <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css" />
+   <link href="/simple-sidebar.css" rel="stylesheet">
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+  <style type="text/css">
+        body, html {
+          background-color: gray;
+          font-family: Gotham, serif;
+        }
+
+        #weeksvilleMap {
+          width: 100%;
+          height: 600px;
+          background-color: gray;
+          margin: 0 auto;
+          float: left;
+        }
+
+        .navbar { 
+          margin-bottom: 0 
+        }
+
+        .toggles {
+        display: none;
+        }
+
+        .sub-poi {
+        display: none;
+        }
+
+  </style>
+
+</head>
+
+<body>
+
+<!-- Navbar from Bootstrap-->
+
+  <nav class="navbar navbar-default">
+  <div class="container-fluid">
+
+    <!-- Nav title -->
+    <div class="navbar-header">
+      <a class="navbar-brand" href="#" id="menu-toggle">Weeksville Corridor Plan</a>
+    </div>
+
+    <!-- Nav links -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        <li><a href="#" id="btn-about">About</a></li>
+        <li><a href="#" id="btn-vision">Vision</a></li>
+        <li><a href="#" id="btn-map">Map</a></li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Links<span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="http://www.brooklyncb8.org/">Brooklyn Community Board 8</a></li>
+            <li><a href="http://www.weeksvillesociety.org/">Weeksville Heritage Center</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+
+<div id="wrapper">
+        <!-- Sidebar -->
+        <div id="sidebar-wrapper">
+            <ul class="sidebar-nav"> 
+                <li>
+                    <a href="#" id="btn-context">Context</a>
+                </li>
+                <li>
+                    <a href="#" class="sub-poi">Weeksville</a>
+                </li>
+                <li>
+                    <a href="#" class="sub-poi">NTAs</a>
+                </li>
+                <li>
+                    <a href="#" class="sub-poi">Community Board</a>
+                </li>
+                <li>
+                    <a href="#">Issues</a>
+                </li>
+                <li>
+                    <a href="#" class="sub-poi">Accessibility</a>
+                </li>
+                <li>
+                    <a href="#" class="sub-poi">Preservation</a>
+                </li>
+            </ul>
+        </div>
+        <!-- /#sidebar-wrapper -->
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+            <div class="container-fluid">
+<!-- About and Vision Jumbotron Panels -->
+
+<div class="jumbotron toggles" id="about">
+  <h2>About</h2>
+  <p>The Weeksville Corridor Improvement Plan aims to:  
+    </br>
+    </br>1. Strengthen the Utica Avenue Commercial Corridor.
+    </br>2. Complete neighborhood wide street scaping on key residential and commercial arteries.
+    </br>3. Preserve Weeksville’s Historical Identity.
+    </br>4. Engage in Local Community Capacity Building.
+  </p>
+</div>
+
+<div class="jumbotron toggles" id="vision">
+  <h2>Vision</h2>
+  <p>The Weeksville Corridor Improvement Plan envisions an empowered Weeksville community with a thriving local business district centered on Utica Avenue. The community’s capacities are strengthened on both professional and individual levels.  Community development, economic growth, and neighborhood livability are enhanced, while residents  are the direct beneficiaries of such improvements . This plan envisions a Weeksville community that is recognized as a historic district and known for its cultural background and historical relevance and contributions to the United States of America.  </p>
+</div>
+
+<div id="weeksvilleMap"></div>
+
+            </div>
+        </div>
+        <!-- /#page-content-wrapper -->
+        <!--Make sure to keep all page content within the #page-content-wrapper. -->
+
+    </div>
+    <!-- /#wrapper -->
+
+  <script src="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js"></script>
+  <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+
+<!-- Javascript begins here -->
+
+<script type="text/javascript">
+
+//Navbar Toggles for About and Vision
+
+$(document).ready(function(){
+   $(".sub-poi").hide();
+   $("#btn-vision").click(function(){
+        $("#vision").slideToggle("slow");
+        $("#about").slideUp("slow");
+        $("#weeksvilleMap").slideUp("slow");
+    });
+    $("#btn-about").click(function(){
+        $("#about").slideToggle("slow");
+        $("#vision").slideUp("slow");
+        $("#weeksvilleMap").slideUp("slow");
+    });
+     $("#btn-context").click(function(){
+        $(".sub-poi").slideToggle("slow");
+    });
+    $("#btn-map").click(function(){
+        $("#weeksvilleMap").slideToggle("slow");
+        $("#about").slideUp("slow");
+        $("#vision").slideUp("slow");
+    });
+    $("#menu-toggle").click(function(){
+        $("#wrapper").toggle("left");
+    });
+  });
+ 
+  //CartoDB Basemap
+  var layer = L.tileLayer('http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png',{
+    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'
+   });
+ 
+  // Leaflet Map
+   var weeksville = [40.670760,-73.926980]
+   var myZoom = 15;
+
+   var map = L.map('weeksvilleMap').setView(weeksville, myZoom);
+   map.addLayer(layer)
+
+// NTA hover effects *NOT FUNCTIONING*
+function mouseoverFunction(e) {
+    var layer = e.target;
+
+    layer.setStyle({
+        weight: 5,
+        color: '#666',
+        dashArray: '',
+        fillOpacity: 0.7
+    });
+
+    if (!L.Browser.ie && !L.Browser.opera) {
+        layer.bringToFront();
+    }
+};
+
+function resetHighlight(e) {
+    layer.resetStyle(e.target);
+    // var layer = e.target
+
+    // layer.setStyle({
+    //      weight: 5,
+    //      color: '',
+    //      dashArray: '',
+    //      fillOpacity: 0.7
+    // });
+
+     if (!L.Browser.ie && !L.Browser.opera) {
+         layer.bringToFront();
+     } 
+
+    //console.log("layer: " + e.target);
+    //console.log("geojson: " + geojson); 
+}
+
+function onEachFeature(feature, layer) {
+    layer.on({
+        mouseover: mouseoverFunction,
+        mouseout: resetHighlight,
+    });
+}
+
+//Neighborhood tabulation shapes
+  $.getJSON('ntas.geojson', function(ntadata) {
+    geojson = L.geoJson(ntadata,{
+      onEachFeature: onEachFeature
+    }).addTo(map); 
+  });
+ 
+ 
+   //WEEKSVILLE POLYGON
+
+   var polygon = L.polygon([
+    [40.668351,-73.920071],
+    [40.664575,-73.928740],
+    [40.665096,-73.928740],
+    [40.665389,-73.934276],
+    [40.671606,-73.933589],
+    [40.671801,-73.936422],
+    [40.677562,-73.935821],
+    [40.676716,-73.919256]
+    ]);
+
+   polygon.addTo(map)
+ 
+   </script>
+ </body>
+ </html>
