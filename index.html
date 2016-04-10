@@ -6,43 +6,64 @@
 
 <!-- Leaflet Stylesheet -->
   <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css" />
-   <link href="/simple-sidebar.css" rel="stylesheet">
+   <link href="simple-sidebar.css" rel="stylesheet">
   <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+  <link href='https://fonts.googleapis.com/css?family=Roboto+Slab:700,400' rel='stylesheet' type='text/css'>
 
   <style type="text/css">
+  /* Custom CSS */
         body, html {
           background-color: gray;
-          font-family: Gotham, serif;
+          font-family: 'Roboto Slab', serif;
         }
 
         #weeksvilleMap {
           width: 100%;
           height: 600px;
-          background-color: gray;
-          margin: 0 auto;
+          background-color: #f6905d;
+          margin: none;
           float: left;
         }
 
         .navbar { 
-          margin-bottom: 0 
+          font-family: 'Roboto Slab', serif;
+          padding-left: 15px;
+          margin-bottom: 0;
+        }
+
+        .navbar-default .navbar-nav > li > a {
+          color: #f6905d; 
+          background: rgba(255,255,255,0.2);
+        }
+
+        .navbar-brand {
+          color: #3755a5; 
+          background: rgba(255,255,255,0.2);
+        }
+        #page-content-wrapper {
+          padding: 1px;
+        }
+
+        .container-fluid {
+          padding-right: 0px;
+          padding-left: 0px; 
         }
 
         .toggles {
-        display: none;
+          display: none;
+          color: #3755a5;
         }
 
         .sub-poi {
-        display: none;
+          display: none;
+          text-indent: 35px;
         }
 
   </style>
-
 </head>
 
 <body>
-
 <!-- Navbar from Bootstrap-->
-
   <nav class="navbar navbar-default">
   <div class="container-fluid">
 
@@ -77,22 +98,22 @@
                     <a href="#" id="btn-context">Context</a>
                 </li>
                 <li>
-                    <a href="#" class="sub-poi">Weeksville</a>
+                    <a href="#" id-"btn-wksvl" class="sub-poi">Weeksville</a>
                 </li>
                 <li>
-                    <a href="#" class="sub-poi">NTAs</a>
+                    <a href="#" id="btn-ntas" class="sub-poi">NTAs</a>
                 </li>
                 <li>
                     <a href="#" class="sub-poi">Community Board</a>
                 </li>
                 <li>
-                    <a href="#">Issues</a>
+                    <a href="#" id="btn-issues">Issues</a>
                 </li>
                 <li>
-                    <a href="#" class="sub-poi">Accessibility</a>
+                    <a href="#" id="btn-access" class="sub-poi">Accessibility</a>
                 </li>
                 <li>
-                    <a href="#" class="sub-poi">Preservation</a>
+                    <a href="#" id="btn-pres" class="sub-poi">Preservation</a>
                 </li>
             </ul>
         </div>
@@ -153,14 +174,17 @@ $(document).ready(function(){
      $("#btn-context").click(function(){
         $(".sub-poi").slideToggle("slow");
     });
+     $("#btn-issues").click(function(){
+        $(".sub-poi").slideToggle("slow");
+    });
     $("#btn-map").click(function(){
         $("#weeksvilleMap").slideToggle("slow");
         $("#about").slideUp("slow");
         $("#vision").slideUp("slow");
     });
-    $("#menu-toggle").click(function(){
-        $("#wrapper").toggle("left");
-    });
+    // $("#menu-toggle").click(function(){
+    //     $("#wrapper").toggle("left");
+    // });
   });
  
   //CartoDB Basemap
@@ -172,27 +196,30 @@ $(document).ready(function(){
    var weeksville = [40.670760,-73.926980]
    var myZoom = 15;
 
-   var map = L.map('weeksvilleMap').setView(weeksville, myZoom);
+   var map = L.map('weeksvilleMap', {
+    layers: [layer]
+   }
+   ).setView(weeksville, myZoom);
    map.addLayer(layer)
 
 // NTA hover effects *NOT FUNCTIONING*
-function mouseoverFunction(e) {
-    var layer = e.target;
+// function mouseoverFunction(e) {
+//     var layer = e.target;
 
-    layer.setStyle({
-        weight: 5,
-        color: '#666',
-        dashArray: '',
-        fillOpacity: 0.7
-    });
+//     layer.setStyle({
+//         weight: 5,
+//         color: '#666',
+//         dashArray: '',
+//         fillOpacity: 0.7
+//     });
 
-    if (!L.Browser.ie && !L.Browser.opera) {
-        layer.bringToFront();
-    }
-};
+//     if (!L.Browser.ie && !L.Browser.opera) {
+//         layer.bringToFront();
+//     }
+// };
 
-function resetHighlight(e) {
-    layer.resetStyle(e.target);
+// function resetHighlight(e) {
+//     layer.resetStyle(e.target);
     // var layer = e.target
 
     // layer.setStyle({
@@ -202,27 +229,28 @@ function resetHighlight(e) {
     //      fillOpacity: 0.7
     // });
 
-     if (!L.Browser.ie && !L.Browser.opera) {
-         layer.bringToFront();
-     } 
+     // if (!L.Browser.ie && !L.Browser.opera) {
+     //     layer.bringToFront();
+     // } 
 
     //console.log("layer: " + e.target);
     //console.log("geojson: " + geojson); 
-}
+// }
 
-function onEachFeature(feature, layer) {
-    layer.on({
-        mouseover: mouseoverFunction,
-        mouseout: resetHighlight,
-    });
-}
+// function onEachFeature(feature, layer) {
+//     layer.on({
+//         mouseover: mouseoverFunction,
+//         mouseout: resetHighlight,
+//     });
+// }
 
 //Neighborhood tabulation shapes
-  $.getJSON('ntas.geojson', function(ntadata) {
-    geojson = L.geoJson(ntadata,{
-      onEachFeature: onEachFeature
-    }).addTo(map); 
-  });
+
+  // $.getJSON('ntas.geojson', function(ntadata) {
+  //   var geojson = L.geoJson(ntadata,{
+  //     onEachFeature: onEachFeature
+  //   }).addTo(map); 
+  // });
  
  
    //WEEKSVILLE POLYGON
@@ -236,10 +264,34 @@ function onEachFeature(feature, layer) {
     [40.671801,-73.936422],
     [40.677562,-73.935821],
     [40.676716,-73.919256]
-    ]);
+    ], {
+      color: '#3755a5',
+      fillColor: '#3755a5',
+      fillOpacity: 0.5
+    }
+    );
 
    polygon.addTo(map)
- 
+   polygon.bindPopup("<b>Weeksville</b>: The Weeksville study area is located in eastern Crown Heights and is bound to the north by Atlantic Avenue, to the south by East New York Avenue.");
+
+   //ATL and UTICA CONFLICT ZONES
+   var circle = L.circle([40.677388,-73.930306], 75, {
+    color: '#f6905d',
+    fillColor: '#f6905d',
+    fillOpacity: 0.5
+  })
+  .addTo(map);
+
+   circle.bindPopup("<b>Identified Conflict Zone</b>: The Atlantic Ave crossing at Utica Ave is particularly dangerous and serves as a barrier to pedestrians.");
+
+
+   var overlayMaps = {
+     "Weeksville Area": polygon,
+     "Weeksville NTAs": ntadata
+    };
+
+  L.control.layers(layer, overlayMaps).addTo(map);
+
    </script>
  </body>
  </html>
